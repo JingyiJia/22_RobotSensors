@@ -10,6 +10,7 @@ import ev3dev.ev3 as ev3
 import time
 import math
 
+
 # -----------------------------------------------------------------------------
 # TODO 2:  With your instructor, do quiz questions 1 through 5.
 #          After you understand the answers to those questions,
@@ -25,10 +26,10 @@ import math
 def main():
     """ Calls the testing functions. """
     # Un-comment out these tests as you implement the methods they test.
-    # run_test_beep_and_tone()
-    # run_test_go_straight_for_seconds()
+    run_test_beep_and_tone()
+    run_test_go_straight_for_seconds()
     # run_test_go_straight_for_inches_using_time()
-    # run_test_go_straight_for_inches_using_sensor()
+    run_test_go_straight_for_inches_using_sensor()
     # run_test_raise_arm()
     # run_test_lower_arm()
     # run_test_go_straight_until_black()
@@ -43,7 +44,7 @@ def run_test_beep_and_tone():
        -- tone method of the ToneMaker class
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this method.
+    # Done: 4.  Implement and test this method.
     # -------------------------------------------------------------------------
     # IMPORTANT:
     #   For testing the   beep   method,
@@ -57,6 +58,10 @@ def run_test_beep_and_tone():
     #   in increments of 10, with 50 millisecond durations.
     #   Do not forget to apply the   wait   method to tone, as usual.
     # -------------------------------------------------------------------------
+    b = Beeper()
+    b.beep()
+
+
 
 
 # -----------------------------------------------------------------------------
@@ -348,11 +353,18 @@ class DriveSystem(object):
                 break
 
     def go_straight_for_inches_using_time(self, inches, speed):
-        # NOTE to students:  The constant and formula below are not accurate
-        seconds_per_inch_at_100 = 10.0  # 1 sec = 10 inches at 100 speed
-        seconds = abs(inches * seconds_per_inch_at_100 / speed)
+        inches_per_degree = self.left_motor.WheelCircumference / 360
+        desired_degrees = inches / inches_per_degree
+        self.left_motor.reset_position()
+        self.go(speed,speed)
+        while abs(self.left_motor.get_position())>desired_degrees:
+            self.stop()
+            break
 
-        self.go_straight_for_seconds(seconds, speed)
+
+
+
+
 
     def go_straight_for_inches_using_sensor(self, inches, speed):
         pass
